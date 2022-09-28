@@ -10,15 +10,7 @@ import {
 // import {faFacebook} from "@fortawesome/free-brands-svg-icons"
 
 const WeatherCard = ({ weather, degreechange}) => {
-  console.log(weather);
-  const styleCss = {}
-  // const styleCss = {
-  //   width:"500px",
-  //   height:"200px",
-  //   background: "green",
-  //   display:"flex"
-  // }
-  // style={styleCss}
+  // console.log(weather);
   let srcIcon = `http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`;
   return (
     <div className="cards">

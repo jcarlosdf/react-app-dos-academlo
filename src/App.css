@@ -48,11 +48,132 @@
   display: flex;
 }
 
+.frameLoading{
+  background-color: #a3a0a0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 55;
+}
+.frameLoading::before{
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  z-index: 160;
+  background-color: rgba(128, 128, 130, 0.915);
+  transform: translateX(570px) skewX(30deg);
+  animation: loadingSkew 1s ease-in-out infinite ;
+  transition: all 2s ease-in-out;
+}
+
 .YTvideo .iframeYTvideo{
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99;
+  z-index: 50;
+  cursor: pointer;
+}
+
+@keyframes loadingSkew {
+  from{
+    transform: translateX(-70px) skewX(30deg);
+    background-color: rgba(203, 203, 205, 0.1);
+  }
+  10%{
+    transform: translateX(0) skewX(30deg);
+    background-color: rgba(235, 235, 240, 0.2);
+  }
+  25%{
+    transform: translateX(70px) skewX(30deg);
+  }
+  40%{
+    transform: translateX(170px) skewX(30deg);
+  }
+  50%{
+    transform: translateX(270px) skewX(30deg);
+  }
+  60%{
+    transform: translateX(470px) skewX(30deg);
+    background-color: rgba(68, 68, 70, 0.1);
+  }
+  75%{
+    transform: translateX(570px) skewX(30deg);
+    background-color: rgba(51, 51, 52, 0.2);
+  }
+  90%{
+    transform: translateX(870px) skewX(30deg);
+  }
+  to{
+    transform: translateX(1080px) skewX(30deg);
+  }
+  
+}
+
+
+
+
+/* LOADER CARD */
+.cardLoading{
+  margin: 0 auto;
+  display: flex;
+  border-radius: 10px;
+  z-index: 105;
+  background-color: #fff;
+  opacity: 0.5;
+  width: 300px;
+  height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+.cardLoading::before{
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  z-index: 110;
+  background-color: rgba(128, 128, 130, 0.3);
+  transform: translateX(570px) skewX(30deg);
+  animation: loaderCard 1s ease-in-out infinite ;
+  transition: all 2s ease-in-out;
+}
+
+@keyframes loaderCard {
+  from{
+    transform: translateX(-70px) skewX(-30deg);
+    background-color: rgba(203, 203, 205, 0.1);
+  }
+  10%{
+    transform: translateX(0) skewX(-30deg);
+    background-color: rgba(235, 235, 240, 0.2);
+  }
+  25%{
+    transform: translateX(70px) skewX(-30deg);
+  }
+  40%{
+    transform: translateX(170px) skewX(-30deg);
+  }
+  50%{
+    transform: translateX(270px) skewX(-30deg);
+  }
+  60%{
+    transform: translateX(470px) skewX(-30deg);
+    background-color: rgba(68, 68, 70, 0.1);
+  }
+  75%{
+    transform: translateX(570px) skewX(-30deg);
+    background-color: rgba(51, 51, 52, 0.2);
+  }
+  90%{
+    transform: translateX(870px) skewX(-30deg);
+  }
+  to{
+    transform: translateX(1080px) skewX(-30deg);
+  }
+  
 }

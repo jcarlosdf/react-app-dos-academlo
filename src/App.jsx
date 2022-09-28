@@ -7,6 +7,9 @@ import WeatherCard from "./Components/WeatherCard";
 function App() {
   const [coords, setCoords] = useState();
   const [weather, setWeather] = useState();
+  const [degree, setDegree] = useState({});
+  const [loadingVideo, setLoadingVideo] = useState(true);
+  const [loadingCard, setLoadingCard] = useState(true);
 
   useEffect(() => {
     const success = (position) => {
@@ -16,6 +19,7 @@ function App() {
       };
       setCoords(localor);
     };
+    // return an error if location is not confirmed by users
     const error = (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
       if (err.PERMISSION_DENIED || err.TIMEOUT) {
@@ -42,22 +46,24 @@ function App() {
         .get(WeatherUrl)
         .then((res) => {
           setWeather(res.data);
-          setDegree({TEMP:res.data.main.temp,isCelsius:true})
-          console.log(degree)
+          setDegree({ TEMP: res.data.main.temp, isCelsius: true });
+          setLoadingVideo( false );
+          // console.log(degree)
           const videoUrl = `https://youtube.googleapis.com/youtube/v3/search?q=${res.data.weather[0].description}%20sounds%20images%20only&key=AIzaSyDL2_5c8YZyM1Fe-v61yH5lQQZwGZ9xv28`;
           fetch(videoUrl)
             .then((res) => res.json())
             .then((resJson) => {
-              console.log(videoUrl)
-              const YTVideoID = resJson.items[Math.random() * 5 | 0].id.videoId;
+              // console.log(videoUrl)
+              const YTVideoID =
+                resJson.items[(Math.random() * 5) | 0].id.videoId;
               setVideoID(YTVideoID);
+              setLoadingCard( false );
             })
             .catch((error) => console.error(error));
         })
         .catch((error) => console.error(error));
     }
   }, [coords]);
-
 
   // YouTube IFrame Player API.
   const [videoID, setVideoID] = useState("");
@@ -66,22 +72,22 @@ function App() {
       autoplay: 1,
       controls: 0,
       loop: 1,
-      modestbranding: 1
+      modestbranding: 1,
     },
   };
-  // Youtube custom functions 
-  const onStart = e => {
-    e.target.playVideo()
-    e.target.setVolume(70)
-  }
-  const onPaused = e => {
-    e.target.playVideo()
-    if(e.target.isMuted()){
-      e.target.unMute()
-      }else{
-        e.target.mute()
-      }
-  }
+  // Youtube custom functions
+  const onStart = (e) => {
+    e.target.playVideo();
+    e.target.setVolume(70);
+  };
+  const onPaused = (e) => {
+    e.target.playVideo();
+    if (e.target.isMuted()) {
+      e.target.unMute();
+    } else {
+      e.target.mute();
+    }
+  };
   // const checkElapsedTime = (e) => {
   //   console.log(e.target.playerInfo.playerState);
   //   const duration = e.target.getDuration();
@@ -92,34 +98,49 @@ function App() {
   // };
 
   // transform weather temperature degree value
-  let [degree, setDegree] = useState();
   function degreeTransform() {
-    if(degree.isCelsius){
+    if (degree.isCelsius) {
       // (26,27 °C × 9/5) + 32 = 79,286 °F
-      const toFarenheit = ((degree.TEMP * 9 / 5) + 32).toFixed(2);
-      setDegree({TEMP:toFarenheit,isCelsius:false});
-    }else{
+      const toFarenheit = ((degree.TEMP * 9) / 5 + 32).toFixed(2);
+      setDegree({ TEMP: toFarenheit, isCelsius: false });
+    } else {
       // (26,27 °F − 32) × 5/9 = -3,183 °C
-      const toCelsius = ((degree.TEMP - 32) * 5/9).toFixed(2);
-      setDegree({TEMP:toCelsius,isCelsius:true});
+      const toCelsius = (((degree.TEMP - 32) * 5) / 9).toFixed(2);
+      setDegree({ TEMP: toCelsius, isCelsius: true });
     }
   }
-
+  // console.log(loadingCard);
+  // console.log(loadingVideo);
   return (
     <div className="App">
-      <WeatherCard weather={weather} degreechange={{degreeTransform, degree}} />
-      <div className="YTvideo">
+      {
+        loadingCard == true ?
+        <div className="cardLoading"></div>
+        :
+        <WeatherCard
+          weather={weather}
+          degreechange={{ degreeTransform, degree }}
+        />
+      }
+
+      <div className={loadingVideo == true ? "frameLoading" : "YTvideo"}>
         <YouTube
           videoId={videoID}
           iframeClassName={"iframeYTvideo"}
           // containerClassName="embed embed-youtube"
           opts={opts}
           loading={"loading"}
-          onPlay={(event)=>{}}
-          onPause={(event) => {onPaused(event)}}
-          onEnd={(event)=>{event.target.playVideo()}}
-          onError={(event)=>{}}
-          onReady={(event)=>{onStart(event)}}
+          onPlay={(event) => {}}
+          onPause={(event) => {
+            onPaused(event);
+          }}
+          onEnd={(event) => {
+            event.target.playVideo();
+          }}
+          onError={(event) => {}}
+          onReady={(event) => {
+            onStart(event);
+          }}
           // onStateChange={(e)=>{e.target.playVideo()}}
         />
       </div>
